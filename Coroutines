@@ -1,0 +1,32 @@
+
+// Execute this code to understand the difference between async and withContext
+
+viewModelScope.launch{
+            Log.i("gaz --> ","Start of Task")
+            val resultOneDeferred = async { TaskOne() }
+            val resultTwoDeferred = async { TaskTwo() }
+            val combinedResult = resultOneDeferred.await() + resultTwoDeferred.await()
+            Log.i("gaz --> ",combinedResult)
+
+            val resultOne = withContext(Dispatchers.IO) { TaskOne() }
+            val resultTwo = withContext(Dispatchers.IO) { TaskTwo() }
+            val combinedResultWithContext = resultOne + resultTwo
+            Log.i("gaz --> ",combinedResultWithContext)
+        }
+
+    }
+    private suspend fun TaskOne(): String
+    {
+        Log.i("gaz --> ","before delay in Task one")
+        delay(2000)
+        Log.i("gaz --> ","after delay in Task one")
+        return "One"
+    }
+
+    private suspend fun TaskTwo(): String
+    {
+        Log.i("gaz --> ","before delay in Task two")
+        delay(200)
+        Log.i("gaz --> ","after delay in Task two")
+        return "Two"
+    }
